@@ -45,6 +45,7 @@ class _FormPageState extends State<FormPage>
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -123,7 +124,7 @@ class _FormPageState extends State<FormPage>
                               iconSize: 50,
                               dropdownColor: Colors.grey,
                               iconEnabledColor: bleu,
-                              value: type!,
+                              value: type,
                               items: const [
                                 DropdownMenuItem(
                                   value: 'Scollaire',
@@ -209,8 +210,7 @@ class _FormPageState extends State<FormPage>
                     etat: etat!,
                     avancement: avancement);
                 setIsSending(true);
-                await TacheService().setTacheToFirebase(tache: tache);
-                setIsSending(false);
+                TacheService().setTacheToFirebase(tache: tache);
                 Navigator.pop(context);
               },
               child: isSending
@@ -253,7 +253,7 @@ class _FormPageState extends State<FormPage>
                     iconSize: 50,
                     dropdownColor: Colors.grey,
                     iconEnabledColor: bleu,
-                    value: etat!,
+                    value: etat,
                     items: const [
                       DropdownMenuItem(
                         value: 'En progress',

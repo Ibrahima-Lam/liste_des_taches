@@ -41,7 +41,7 @@ class TacheService {
     }
   }
 
-  Future<void> setTacheToFirebase({
+  Future<bool> setTacheToFirebase({
     required Tache tache,
   }) async {
     try {
@@ -56,6 +56,9 @@ class TacheService {
         'etat': tache.etat,
         'avancement': tache.avancement,
       });
-    } catch (e) {}
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

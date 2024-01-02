@@ -5,10 +5,8 @@ import 'package:liste_des_taches/liste.dart';
 // ignore: must_be_immutable
 class PopupMenuWidget extends StatelessWidget {
   BuildContext contxt;
-  PopupMenuWidget({super.key, required this.contxt}) {
-    // TODO: implement PopupMenuWidget
-    throw UnimplementedError();
-  }
+  final Function? onTap;
+  PopupMenuWidget({super.key, required this.contxt, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +25,7 @@ class PopupMenuWidget extends StatelessWidget {
                 onTap: () async {
                   await Navigator.of(contxt)
                       .push(MaterialPageRoute(builder: (contxt) => FormPage()));
+                  onTap!();
                 },
               ),
             ]);

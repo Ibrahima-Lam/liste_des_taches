@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^4.15.3
   cloud_firestore: ^4.13.6
   get: ^4.6.6
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:

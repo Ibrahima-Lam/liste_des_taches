@@ -17,12 +17,20 @@ class ListePage extends StatefulWidget {
 class _ListePageState extends State<ListePage> {
   List<Tache> Taches = [];
   bool isloading = false;
+  String query = '';
 
   String etat = 'En progress';
 
   List<Tache> filtreTaches() {
-    return Taches.where(
-        (element) => element.etat.toUpperCase() == etat.toUpperCase()).toList();
+    final List<Tache> liste = query.isEmpty
+        ? Taches.where(
+                (element) => element.etat.toUpperCase() == etat.toUpperCase())
+            .toList()
+        : Taches.where((element) =>
+                element.etat.toUpperCase() == etat.toUpperCase() &&
+                element.titre.toUpperCase().startsWith(query.toUpperCase()))
+            .toList();
+    return liste;
   }
 
   void setIsLoding(bool val) {
@@ -46,6 +54,7 @@ class _ListePageState extends State<ListePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -74,6 +83,7 @@ class _ListePageState extends State<ListePage> {
           actions: [
             PopupMenuWidget(
               contxt: context,
+              onTap: getData,
             )
           ],
         ),
@@ -91,7 +101,12 @@ class _ListePageState extends State<ListePage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: const Color.fromARGB(255, 236, 232, 232)),
-                  child: const TextField(
+                  child: TextField(
+                    onChanged: (val) {
+                      setState(() {
+                        query = val;
+                      });
+                    },
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search_outlined),
                       border: InputBorder.none,
