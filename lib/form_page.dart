@@ -123,20 +123,20 @@ class _FormPageState extends State<FormPage>
                               iconSize: 50,
                               dropdownColor: Colors.grey,
                               iconEnabledColor: bleu,
+                              value: type!,
                               items: const [
                                 DropdownMenuItem(
-                                  value: Text('Scollaire'),
+                                  value: 'Scollaire',
                                   child: Text('Scollaire'),
                                 ),
                                 DropdownMenuItem(
-                                  value: Text('Personnelle'),
+                                  value: 'Personnelle',
                                   child: Text('Personnelle'),
                                 ),
                               ],
                               onChanged: (val) {
                                 setState(() {
-                                  type = val!.data;
-                                  ;
+                                  type = val;
                                 });
                               }),
                         ],
@@ -253,23 +253,24 @@ class _FormPageState extends State<FormPage>
                     iconSize: 50,
                     dropdownColor: Colors.grey,
                     iconEnabledColor: bleu,
+                    value: etat!,
                     items: const [
                       DropdownMenuItem(
-                        value: Text('En progress'),
+                        value: 'En progress',
                         child: Text('En progress'),
                       ),
                       DropdownMenuItem(
-                        value: Text('A faire'),
+                        value: 'A faire',
                         child: Text('A faire'),
                       ),
                       DropdownMenuItem(
-                        value: Text('Termine'),
+                        value: 'Termine',
                         child: Text('Termine'),
                       ),
                     ],
                     onChanged: (val) {
                       setState(() {
-                        etat = val!.data;
+                        etat = val;
                       });
                     }),
               ),
