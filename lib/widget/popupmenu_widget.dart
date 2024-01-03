@@ -12,6 +12,8 @@ class PopupMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
         icon: const Icon(Icons.menu),
+        position: PopupMenuPosition.under,
+        color: Colors.grey,
         itemBuilder: (context) => [
               PopupMenuItem(
                 child: Text('Liste des Taches'),

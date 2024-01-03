@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:liste_des_taches/form_page.dart';
+import 'package:liste_des_taches/service/tache_service.dart';
 import 'package:liste_des_taches/taches/tache.dart';
 
 Color bleu = const Color.fromARGB(255, 10, 41, 242);
 
+// ignore: must_be_immutable
 class TacheWidget extends StatelessWidget {
   final Tache tache;
-  const TacheWidget({super.key, re, required this.tache});
+  final Function? callback;
+  TacheWidget({super.key, this.callback, required this.tache});
+  TacheService tacheService = TacheService();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +51,17 @@ class TacheWidget extends StatelessWidget {
               Container(
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: PopupMenuButton(
-                  itemBuilder: (context) => [],
+                  position: PopupMenuPosition.under,
+                  color: grisClair,
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Text('Supprimer'),
+                      value: 'supprimer',
+                      onTap: () {
+                        _supprimerTache(context: context);
+                      },
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -63,6 +78,7 @@ class TacheWidget extends StatelessWidget {
                   Row(
                     children: [
                       Container(
+                        margin: EdgeInsets.only(right: 10),
                         height: 2,
                         width: 200,
                         child: LinearProgressIndicator(
@@ -100,5 +116,39 @@ class TacheWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _supprimerTache({required BuildContext context}) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Suppression'),
+              content: Text('Voulez vous supprimer cette tache ?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'annuler');
+                  },
+                  child: Text('Annuler'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'ok');
+                  },
+                  child: Text('Ok'),
+                ),
+              ],
+            )).then((value) async {
+      if (value == 'ok') {
+        await tacheService.deleteTacheFromFirebase(tache.idTache);
+        callback!();
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Suppression avec succees'),
+          ),
+        );
+      }
+    });
   }
 }

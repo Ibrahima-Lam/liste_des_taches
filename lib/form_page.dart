@@ -8,7 +8,8 @@ import 'package:liste_des_taches/widget/popupmenu_widget.dart';
 Color grisClair = const Color.fromARGB(255, 233, 231, 231);
 
 class FormPage extends StatefulWidget {
-  const FormPage({super.key});
+  final Tache? tache;
+  const FormPage({super.key, this.tache});
 
   @override
   State<FormPage> createState() => _FormPageState();
@@ -50,7 +51,6 @@ class _FormPageState extends State<FormPage>
         appBar: AppBar(
           backgroundColor: Colors.white,
           leading: Container(
-            margin: const EdgeInsets.only(left: 20),
             child: const CircleAvatar(
               backgroundColor: Colors.grey,
               child: Text('A'),
@@ -125,16 +125,14 @@ class _FormPageState extends State<FormPage>
                               dropdownColor: Colors.grey,
                               iconEnabledColor: bleu,
                               value: type,
-                              items: const [
-                                DropdownMenuItem(
-                                  value: 'Scollaire',
-                                  child: Text('Scollaire'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'Personnelle',
-                                  child: Text('Personnelle'),
-                                ),
-                              ],
+                              items: ['Scollaire', 'Personnelle']
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e),
+                                    ),
+                                  )
+                                  .toList(),
                               onChanged: (val) {
                                 setState(() {
                                   type = val;
@@ -151,7 +149,7 @@ class _FormPageState extends State<FormPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Titre',
                       style: TextStyle(
                         fontSize: 15,
@@ -254,20 +252,14 @@ class _FormPageState extends State<FormPage>
                     dropdownColor: Colors.grey,
                     iconEnabledColor: bleu,
                     value: etat,
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'En progress',
-                        child: Text('En progress'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'A faire',
-                        child: Text('A faire'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Termine',
-                        child: Text('Termine'),
-                      ),
-                    ],
+                    items: ['A faire', 'En progress', 'Termine']
+                        .map(
+                          (e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ),
+                        )
+                        .toList(),
                     onChanged: (val) {
                       setState(() {
                         etat = val;

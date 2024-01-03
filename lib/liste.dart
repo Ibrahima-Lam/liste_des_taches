@@ -174,7 +174,10 @@ class _ListePageState extends State<ListePage> {
                         )
                       : Column(
                           children: filtreTaches()
-                              .map((tache) => TacheWidget(tache: tache))
+                              .map((tache) => TacheWidget(
+                                    tache: tache,
+                                    callback: getData,
+                                  ))
                               .toList(),
                         ),
                 ),

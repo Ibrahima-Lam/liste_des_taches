@@ -61,4 +61,10 @@ class TacheService {
       return false;
     }
   }
+
+  Future<void> deleteTacheFromFirebase(id) async {
+    try {
+      await FirebaseFirestore.instance.collection('tache').doc(id).delete();
+    } catch (e) {}
+  }
 }
