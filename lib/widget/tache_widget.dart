@@ -63,9 +63,12 @@ class TacheWidget extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        color: bleu,
                         height: 2,
                         width: 200,
+                        child: LinearProgressIndicator(
+                          value: (tache.avancement / 100).toDouble(),
+                          color: bleu,
+                        ),
                       ),
                       Text('${tache.avancement}%'),
                     ],
