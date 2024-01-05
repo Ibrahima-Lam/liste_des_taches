@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:liste_des_taches/liste.dart';
+import 'package:liste_des_taches/service/storage_sevice.dart';
 
 final Color bleu = Color.fromARGB(255, 10, 41, 242);
 
@@ -15,12 +16,39 @@ class _LoginPageState extends State<LoginPage> {
   bool visible = false;
   bool isSigning = false;
   bool remember = true;
+  StorageService _storageService = StorageService();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   void setIsSigning(bool val) {
     setState(() {
       isSigning = val;
+    });
+  }
+
+  Future<bool> _checkUser() async {
+    final Map<String, String?> data = await _storageService.getData();
+    // ignore: use_build_context_synchronously
+    print(data);
+    setIsSigning(true);
+    final bool res =
+        await login(context, data['email'] ?? '', data['password'] ?? '');
+    setIsSigning(false);
+    if (!res) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Pas d'utilisateur ensegitré ")));
+    }
+    return res;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUser().then((value) {
+      if (value)
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ListePage()));
     });
   }
 
@@ -35,12 +63,12 @@ class _LoginPageState extends State<LoginPage> {
       return true;
     } on FirebaseAuthException catch (e) {
       print(e);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Echec connexion')));
+
       return false;
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
@@ -55,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Container(
                 decoration: BoxDecoration(),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -66,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               Container(
@@ -113,41 +141,48 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Row(
                       children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: bleu,
-                              foregroundColor: Colors.white,
-                              elevation: 1,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 10),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () async {
-                              setIsSigning(true);
-                              final bool res = await login(
-                                  context,
-                                  emailController.text,
-                                  passwordController.text);
-                              setIsSigning(false);
-                              if (res)
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ListePage()));
-                            },
-                            child: isSigning
-                                ? Center(
+                        isSigning
+                            ? Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: bleu,
+                                    foregroundColor: Colors.white,
+                                    elevation: 1,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Center(
                                     child: CircularProgressIndicator(
                                       color: Colors.white,
                                     ),
-                                  )
-                                : Text(
+                                  ),
+                                ),
+                              )
+                            : Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: bleu,
+                                    foregroundColor: Colors.white,
+                                    elevation: 1,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    _sign();
+                                  },
+                                  child: Text(
                                     'Sign In',
                                     style: TextStyle(color: Colors.white),
                                   ),
-                          ),
-                        ),
+                                ),
+                              ),
                       ],
                     ),
                   ],
@@ -175,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
           suffixIcon: obscure
               ? IconButton(
                   color: bleu,
-                  icon: Icon(Icons.remove_red_eye),
+                  icon: const Icon(Icons.remove_red_eye),
                   onPressed: () {
                     setState(() {
                       visible = !visible;
@@ -189,6 +224,23 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _sign() async {
+    setIsSigning(true);
+    final bool res =
+        await login(context, emailController.text, passwordController.text);
+    setIsSigning(false);
+    if (res) {
+      if (remember) {
+        _storageService.setData(
+            email: emailController.text, password: passwordController.text);
+      }
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => ListePage()));
+    } else
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Echec de connexion')));
   }
 }
 

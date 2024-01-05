@@ -61,6 +61,20 @@ class TacheWidget extends StatelessWidget {
                         _supprimerTache(context: context);
                       },
                     ),
+                    PopupMenuItem(
+                      child: Text('Editer'),
+                      value: 'editer',
+                      onTap: () async {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FormPage(
+                              tache: tache,
+                            ),
+                          ),
+                        );
+                        callback!();
+                      },
+                    ),
                   ],
                 ),
               ),

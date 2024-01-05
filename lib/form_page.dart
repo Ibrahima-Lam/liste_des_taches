@@ -21,7 +21,7 @@ class _FormPageState extends State<FormPage>
   TextEditingController titreController = TextEditingController();
   TextEditingController dateDebutController = TextEditingController();
   TextEditingController dateFinController = TextEditingController();
-  int avancement = 0;
+  int? avancement;
   String? etat;
   String? type;
   bool isSending = false;
@@ -33,6 +33,13 @@ class _FormPageState extends State<FormPage>
 
   @override
   void initState() {
+    etat = widget.tache?.etat;
+    type = widget.tache?.type;
+    avancement = widget.tache?.avancement;
+    titreController.text = widget.tache?.titre ?? '';
+    dateDebutController.text = widget.tache?.dateDebut ?? '';
+    dateFinController.text = widget.tache?.dateFin ?? '';
+
     super.initState();
     _controller = AnimationController(vsync: this);
   }
@@ -51,6 +58,7 @@ class _FormPageState extends State<FormPage>
         appBar: AppBar(
           backgroundColor: Colors.white,
           leading: Container(
+            margin: EdgeInsets.only(left: 15),
             child: const CircleAvatar(
               backgroundColor: Colors.grey,
               child: Text('A'),
@@ -78,7 +86,6 @@ class _FormPageState extends State<FormPage>
           ],
         ),
         body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           padding: EdgeInsets.all(10),
           child: ListView(
             children: [
@@ -122,7 +129,7 @@ class _FormPageState extends State<FormPage>
                         children: [
                           DropdownButton(
                               iconSize: 50,
-                              dropdownColor: Colors.grey,
+                              dropdownColor: grisClair,
                               iconEnabledColor: bleu,
                               value: type,
                               items: ['Scollaire', 'Personnelle']
@@ -187,39 +194,55 @@ class _FormPageState extends State<FormPage>
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Row(
         children: [
-          Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: bleu,
-                foregroundColor: Colors.white,
-                elevation: 1,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onPressed: () async {
-                Tache tache = Tache(
-                    titre: titreController.text,
-                    type: type!,
-                    dateDebut: dateDebutController.text,
-                    dateFin: dateFinController.text,
-                    etat: etat!,
-                    avancement: avancement);
-                setIsSending(true);
-                TacheService().setTacheToFirebase(tache: tache);
-                Navigator.pop(context);
-              },
-              child: isSending
-                  ? Center(
+          isSending
+              ? Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: bleu,
+                      foregroundColor: Colors.white,
+                      elevation: 1,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Center(
                       child: CircularProgressIndicator(
                         color: Colors.white,
                       ),
-                    )
-                  : const Text('Creer une Tache'),
-            ),
-          ),
+                    ),
+                  ),
+                )
+              : Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: bleu,
+                      foregroundColor: Colors.white,
+                      elevation: 1,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () async {
+                      Tache tache = Tache(
+                          idTache: widget.tache!.idTache,
+                          titre: titreController.text,
+                          type: type!,
+                          dateDebut: dateDebutController.text,
+                          dateFin: dateFinController.text,
+                          etat: etat!,
+                          avancement: avancement!);
+                      setIsSending(true);
+                      TacheService().setTacheToFirebase(tache: tache);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Creer une Tache'),
+                  ),
+                ),
         ],
       ),
     );
@@ -241,7 +264,7 @@ class _FormPageState extends State<FormPage>
                 ),
               ),
               Container(
-                width: 150,
+                width: 160,
                 margin: EdgeInsets.only(top: 10),
                 decoration: BoxDecoration(
                   color: grisClair,
@@ -249,7 +272,7 @@ class _FormPageState extends State<FormPage>
                 ),
                 child: DropdownButton(
                     iconSize: 50,
-                    dropdownColor: Colors.grey,
+                    dropdownColor: grisClair,
                     iconEnabledColor: bleu,
                     value: etat,
                     items: ['A faire', 'En progress', 'Termine']
