@@ -55,13 +55,6 @@ class TacheWidget extends StatelessWidget {
                   color: grisClair,
                   itemBuilder: (context) => [
                     PopupMenuItem(
-                      child: Text('Supprimer'),
-                      value: 'supprimer',
-                      onTap: () {
-                        _supprimerTache(context: context);
-                      },
-                    ),
-                    PopupMenuItem(
                       child: Text('Editer'),
                       value: 'editer',
                       onTap: () async {
@@ -74,6 +67,16 @@ class TacheWidget extends StatelessWidget {
                           ),
                         );
                         callback!();
+                      },
+                    ),
+                    PopupMenuItem(
+                      child: const Text(
+                        'Supprimer',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      value: 'supprimer',
+                      onTap: () {
+                        _supprimerTache(context: context);
                       },
                     ),
                   ],

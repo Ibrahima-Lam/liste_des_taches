@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:liste_des_taches/liste.dart';
 import 'package:liste_des_taches/service/storage_sevice.dart';
 
@@ -35,10 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     final bool res =
         await login(context, data['email'] ?? '', data['password'] ?? '');
     setIsSigning(false);
-    if (!res) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Pas d'utilisateur ensegitré ")));
-    }
+
     return res;
   }
 
@@ -46,9 +44,13 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _checkUser().then((value) {
-      if (value)
+      if (value) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => ListePage()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Pas d'utilisateur ensegitré ")));
+      }
     });
   }
 
@@ -233,14 +235,17 @@ class _LoginPageState extends State<LoginPage> {
     setIsSigning(false);
     if (res) {
       if (remember) {
-        _storageService.setData(
+        await _storageService.setData(
             email: emailController.text, password: passwordController.text);
       }
+      // ignore: use_build_context_synchronously
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => ListePage()));
-    } else
+    } else {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Echec de connexion')));
+    }
   }
 }
 

@@ -81,138 +81,135 @@ class _FormPageState extends State<FormPage>
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: Container(
-            margin: EdgeInsets.only(left: 15),
-            child: const CircleAvatar(
-              backgroundColor: Colors.grey,
-              child: Text('A'),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: Container(
+          margin: EdgeInsets.only(left: 15),
+          child: const CircleAvatar(
+            backgroundColor: Colors.grey,
+            child: Text('A'),
+          ),
+        ),
+        title: const Column(
+          children: [
+            Text(
+              'nom',
+              style: TextStyle(fontSize: 13),
             ),
-          ),
-          title: const Column(
-            children: [
-              Text(
-                'nom',
-                style: TextStyle(fontSize: 13),
+            Text(
+              'Prenom',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
-                'Prenom',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            PopupMenuWidget(
-              contxt: context,
-            )
+            ),
           ],
         ),
-        body: Container(
-          padding: EdgeInsets.all(10),
-          child: ListView(
-            children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 10,
+        actions: [
+          PopupMenuWidget(
+            contxt: context,
+          )
+        ],
+      ),
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: ListView(
+          children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Creer une nouvelle tache',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    'Creer une nouvelle tache',
+                ),
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  const Row(
+                    children: [
+                      Text(
+                        'Type',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    decoration: BoxDecoration(
+                      color: grisClair,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        DropdownButton(
+                            iconSize: 50,
+                            dropdownColor: grisClair,
+                            iconEnabledColor: bleu,
+                            value: type,
+                            items: ['Scollaire', 'Personnelle']
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                type = val;
+                              });
+                            }),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Titre',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: grisClair,
+                    ),
+                    child: TextField(
+                      controller: titreController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                 ],
               ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    const Row(
-                      children: [
-                        Text(
-                          'Type',
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                        color: grisClair,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          DropdownButton(
-                              iconSize: 50,
-                              dropdownColor: grisClair,
-                              iconEnabledColor: bleu,
-                              value: type,
-                              items: ['Scollaire', 'Personnelle']
-                                  .map(
-                                    (e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (val) {
-                                setState(() {
-                                  type = val;
-                                });
-                              }),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Titre',
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: grisClair,
-                      ),
-                      child: TextField(
-                        controller: titreController,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              dateGroupe(),
-              etatAvancementGroupe(),
-              submitGroupe(),
-            ],
-          ),
+            ),
+            dateGroupe(),
+            etatAvancementGroupe(),
+            submitGroupe(),
+          ],
         ),
       ),
     );

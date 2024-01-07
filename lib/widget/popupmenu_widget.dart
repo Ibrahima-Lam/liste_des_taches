@@ -27,18 +27,18 @@ class PopupMenuWidget extends StatelessWidget {
               PopupMenuItem(
                 child: Text('Ajouter une Tache'),
                 onTap: () async {
-                  StorageService().setData(email: '', password: '');
                   await Navigator.of(contxt)
                       .push(MaterialPageRoute(builder: (contxt) => FormPage()));
                   onTap!();
                 },
               ),
-              /*  PopupMenuItem(
+              PopupMenuItem(
                 child: Text('Deconnexion'),
                 onTap: () async {
+                  StorageService().setData(email: '', password: '');
                   Navigator.pop(context);
                 },
-              ), */
+              ),
             ]);
   }
 }
