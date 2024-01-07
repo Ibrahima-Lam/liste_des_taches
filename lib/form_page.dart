@@ -9,7 +9,8 @@ Color grisClair = const Color.fromARGB(255, 233, 231, 231);
 
 class FormPage extends StatefulWidget {
   final Tache? tache;
-  const FormPage({super.key, this.tache});
+  final bool insert;
+  const FormPage({super.key, this.tache, this.insert = true});
 
   @override
   State<FormPage> createState() => _FormPageState();
@@ -48,6 +49,34 @@ class _FormPageState extends State<FormPage>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _insert() {
+    Tache tache = Tache(
+        titre: titreController.text,
+        type: type!,
+        dateDebut: dateDebutController.text,
+        dateFin: dateFinController.text,
+        etat: etat!,
+        avancement: avancement ?? 0);
+    setIsSending(true);
+    TacheService().setTacheToFirebase(tache: tache);
+    setIsSending(false);
+    Navigator.pop(context);
+  }
+
+  void _update() {
+    Tache tache = Tache(
+        idTache: widget.tache!.idTache,
+        titre: titreController.text,
+        type: type ?? 'Personnelle',
+        dateDebut: dateDebutController.text,
+        dateFin: dateFinController.text,
+        etat: etat ?? 'A faire',
+        avancement: avancement ?? 0);
+    setIsSending(true);
+    TacheService().setTacheToFirebase(tache: tache);
+    Navigator.pop(context);
   }
 
   @override
@@ -181,7 +210,7 @@ class _FormPageState extends State<FormPage>
               ),
               dateGroupe(),
               etatAvancementGroupe(),
-              submitGroupe(context: context),
+              submitGroupe(),
             ],
           ),
         ),
@@ -189,7 +218,7 @@ class _FormPageState extends State<FormPage>
     );
   }
 
-  Widget submitGroupe({required BuildContext context}) {
+  Widget submitGroupe() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Row(
@@ -227,20 +256,12 @@ class _FormPageState extends State<FormPage>
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    onPressed: () async {
-                      Tache tache = Tache(
-                          idTache: widget.tache!.idTache,
-                          titre: titreController.text,
-                          type: type!,
-                          dateDebut: dateDebutController.text,
-                          dateFin: dateFinController.text,
-                          etat: etat!,
-                          avancement: avancement!);
-                      setIsSending(true);
-                      TacheService().setTacheToFirebase(tache: tache);
-                      Navigator.pop(context);
+                    onPressed: () {
+                      widget.insert ? _insert() : _update();
                     },
-                    child: const Text('Creer une Tache'),
+                    child: widget.insert
+                        ? const Text('Creer une Tache')
+                        : const Text('Modifier la Tache'),
                   ),
                 ),
         ],

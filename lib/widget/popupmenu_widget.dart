@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liste_des_taches/form_page.dart';
 import 'package:liste_des_taches/liste.dart';
-import 'package:liste_des_taches/login_page.dart';
+
 import 'package:liste_des_taches/service/storage_sevice.dart';
 
 // ignore: must_be_immutable
@@ -26,20 +26,19 @@ class PopupMenuWidget extends StatelessWidget {
               ),
               PopupMenuItem(
                 child: Text('Ajouter une Tache'),
-                onTap: () {
-                  StorageService().setData(email: '', password: '');
-                  Navigator.of(contxt)
-                      .push(MaterialPageRoute(builder: (contxt) => FormPage()));
-                },
-              ),
-              PopupMenuItem(
-                child: Text('Deconnexion'),
                 onTap: () async {
-                  await Navigator.of(contxt).push(
-                      MaterialPageRoute(builder: (contxt) => LoginPage()));
+                  StorageService().setData(email: '', password: '');
+                  await Navigator.of(contxt)
+                      .push(MaterialPageRoute(builder: (contxt) => FormPage()));
                   onTap!();
                 },
               ),
+              /*  PopupMenuItem(
+                child: Text('Deconnexion'),
+                onTap: () async {
+                  Navigator.pop(context);
+                },
+              ), */
             ]);
   }
 }

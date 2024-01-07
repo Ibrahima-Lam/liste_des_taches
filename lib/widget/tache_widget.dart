@@ -69,6 +69,7 @@ class TacheWidget extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => FormPage(
                               tache: tache,
+                              insert: false,
                             ),
                           ),
                         );

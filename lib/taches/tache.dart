@@ -8,11 +8,11 @@ class Tache {
   final int avancement;
 
   Tache(
-      {required this.titre,
+      {this.titre = '',
       this.idTache,
-      required this.type,
-      required this.dateDebut,
-      required this.dateFin,
-      required this.etat,
-      required this.avancement});
+      this.type = 'Personnelle',
+      this.dateDebut = '',
+      this.dateFin = '',
+      this.etat = 'A faire',
+      this.avancement = 0});
 }
