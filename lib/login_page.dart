@@ -32,11 +32,14 @@ class _LoginPageState extends State<LoginPage> {
     final Map<String, String?> data = await _storageService.getData();
     // ignore: use_build_context_synchronously
     print(data);
+    final String email = data['email'] ?? '';
+    final String password = data['password'] ?? '';
+    if (email.isEmpty || password.isEmpty) {
+      return false;
+    }
     setIsSigning(true);
-    final bool res =
-        await login(context, data['email'] ?? '', data['password'] ?? '');
+    final bool res = await login(email, password);
     setIsSigning(false);
-
     return res;
   }
 
@@ -49,18 +52,18 @@ class _LoginPageState extends State<LoginPage> {
             .push(MaterialPageRoute(builder: (context) => ListePage()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Pas d'utilisateur ensegitré ")));
+            const SnackBar(content: Text("Pas d'utilisateur ensegitré ")));
       }
     });
   }
 
-  Future<bool> login(
-      BuildContext context, String email, String password) async {
+  Future<bool> login(String email, String password) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(email + ' est connecté')));
+          .showSnackBar(SnackBar(content: Text('$email est connecté')));
       print(userCredential.user!.uid);
       return true;
     } on FirebaseAuthException catch (e) {
@@ -79,12 +82,12 @@ class _LoginPageState extends State<LoginPage> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -230,8 +233,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _sign() async {
     setIsSigning(true);
-    final bool res =
-        await login(context, emailController.text, passwordController.text);
+    final bool res = await login(emailController.text, passwordController.text);
     setIsSigning(false);
     if (res) {
       if (remember) {

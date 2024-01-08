@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:liste_des_taches/main.dart';
 import 'package:liste_des_taches/service/tache_service.dart';
 import 'package:liste_des_taches/taches/tache.dart';
-
-import 'package:liste_des_taches/widget/popupmenu_widget.dart';
+import 'package:liste_des_taches/widget/scafold_widget.dart';
 
 Color grisClair = const Color.fromARGB(255, 233, 231, 231);
 
@@ -81,37 +80,7 @@ class _FormPageState extends State<FormPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Container(
-          margin: EdgeInsets.only(left: 15),
-          child: const CircleAvatar(
-            backgroundColor: Colors.grey,
-            child: Text('A'),
-          ),
-        ),
-        title: const Column(
-          children: [
-            Text(
-              'nom',
-              style: TextStyle(fontSize: 13),
-            ),
-            Text(
-              'Prenom',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          PopupMenuWidget(
-            contxt: context,
-          )
-        ],
-      ),
+    return ScaffoldWidget(
       body: Container(
         padding: EdgeInsets.all(10),
         child: ListView(
@@ -325,7 +294,14 @@ class _FormPageState extends State<FormPage>
                   color: grisClair,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: TextField(
+                child: TextFormField(
+                  initialValue: (avancement ?? 0).toString(),
+                  validator: (value) {
+                    if ((value as int) > 100 || (value as int) < 0) {
+                      return 'La valeur doit etre 0 et 100';
+                    }
+                    return null;
+                  },
                   keyboardType: TextInputType.number,
                   onChanged: (val) {
                     avancement = int.parse(val);

@@ -4,14 +4,13 @@ class StorageService {
   Future<void> setData(
       {required String email, required String password}) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('email', email);
-    await prefs.setString('password', password);
+    await prefs.setStringList('user', [email, password]);
   }
 
   Future<Map<String, String?>> getData() async {
     final prefs = await SharedPreferences.getInstance();
-    final email = prefs.getString('email');
-    final password = prefs.getString('password');
+    final email = prefs.getStringList('user')![0];
+    final password = prefs.getStringList('user')![1];
     return {'email': email, 'password': password};
   }
 }

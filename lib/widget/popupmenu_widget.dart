@@ -18,14 +18,14 @@ class PopupMenuWidget extends StatelessWidget {
         color: grisClair,
         itemBuilder: (context) => [
               PopupMenuItem(
-                child: Text('Liste des Taches'),
+                child: const Text('Liste des Taches'),
                 onTap: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => ListePage()));
                 },
               ),
               PopupMenuItem(
-                child: Text('Ajouter une Tache'),
+                child: const Text('Ajouter une Tache'),
                 onTap: () async {
                   await Navigator.of(contxt)
                       .push(MaterialPageRoute(builder: (contxt) => FormPage()));
@@ -33,7 +33,7 @@ class PopupMenuWidget extends StatelessWidget {
                 },
               ),
               PopupMenuItem(
-                child: Text('Deconnexion'),
+                child: const Text('Deconnexion'),
                 onTap: () async {
                   StorageService().setData(email: '', password: '');
                   Navigator.pop(context);
