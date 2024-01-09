@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liste_des_taches/service/tache_service.dart';
 import 'package:liste_des_taches/taches/tache.dart';
+import 'package:liste_des_taches/widget/animated_list_widget.dart';
 import 'package:liste_des_taches/widget/scafold_widget.dart';
 import 'package:liste_des_taches/widget/tache_widget.dart';
 
@@ -16,6 +17,7 @@ class ListePage extends StatefulWidget {
 
 class _ListePageState extends State<ListePage> {
   List<Tache> Taches = [];
+  List<Tache> get filteredTaches => filtreTaches();
   bool isloading = false;
   String query = '';
   TextEditingController searchController = TextEditingController();
@@ -31,6 +33,7 @@ class _ListePageState extends State<ListePage> {
                 element.etat.toUpperCase() == etat.toUpperCase() &&
                 element.titre.toUpperCase().startsWith(query.toUpperCase()))
             .toList();
+
     return liste;
   }
 
@@ -78,13 +81,13 @@ class _ListePageState extends State<ListePage> {
                       });
                     },
                     decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search_outlined),
+                        prefixIcon: const Icon(Icons.search_outlined),
                         border: InputBorder.none,
                         hintText: "taper le nom d'une tache",
-                        hintStyle: TextStyle(fontSize: 14),
+                        hintStyle: const TextStyle(fontSize: 14),
                         suffixIcon: query.isNotEmpty
                             ? IconButton(
-                                onPressed: () {}, icon: Icon(Icons.clear))
+                                onPressed: () {}, icon: const Icon(Icons.clear))
                             : null),
                   ),
                 ),
@@ -146,11 +149,16 @@ class _ListePageState extends State<ListePage> {
                           ),
                         )
                       : Column(
-                          children: filtreTaches()
-                              .map((tache) => TacheWidget(
+                          children: filteredTaches
+                              .map(
+                                (tache) => AnimatedListWidget(
+                                  delay: 500,
+                                  child: TacheWidget(
                                     tache: tache,
                                     callback: getData,
-                                  ))
+                                  ),
+                                ),
+                              )
                               .toList(),
                         ),
                 ),

@@ -55,7 +55,6 @@ class TacheWidget extends StatelessWidget {
                   color: grisClair,
                   itemBuilder: (context) => [
                     PopupMenuItem(
-                      child: Text('Editer'),
                       value: 'editer',
                       onTap: () async {
                         await Navigator.of(context).push(
@@ -68,16 +67,26 @@ class TacheWidget extends StatelessWidget {
                         );
                         callback!();
                       },
+                      child: const Text(
+                        'Editer',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 10, 48, 239),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     PopupMenuItem(
-                      child: const Text(
-                        'Supprimer',
-                        style: TextStyle(color: Colors.red),
-                      ),
                       value: 'supprimer',
                       onTap: () {
                         _supprimerTache(context: context);
                       },
+                      child: const Text(
+                        'Supprimer',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -96,7 +105,7 @@ class TacheWidget extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         height: 2,
                         width: 200,
                         child: LinearProgressIndicator(
@@ -140,20 +149,20 @@ class TacheWidget extends StatelessWidget {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text('Suppression'),
-              content: Text('Voulez vous supprimer cette tache ?'),
+              title: const Text('Suppression'),
+              content: const Text('Voulez vous supprimer cette tache ?'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context, 'annuler');
                   },
-                  child: Text('Annuler'),
+                  child: const Text('Annuler'),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context, 'ok');
                   },
-                  child: Text('Ok'),
+                  child: const Text('Ok'),
                 ),
               ],
             )).then((value) async {
@@ -162,7 +171,7 @@ class TacheWidget extends StatelessWidget {
         callback!();
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Suppression avec succees'),
           ),
         );
