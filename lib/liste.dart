@@ -171,7 +171,7 @@ class _ListePageState extends State<ListePage> {
                                 children: filteredTaches
                                     .map(
                                       (tache) => AnimatedListWidget(
-                                        delay: 500,
+                                        delay: 200,
                                         child: TacheWidget(
                                           tache: tache,
                                           callback: getData,

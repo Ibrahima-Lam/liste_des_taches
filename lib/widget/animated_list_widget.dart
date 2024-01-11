@@ -22,7 +22,7 @@ class __AnimatedListWidgetState extends State<AnimatedListWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
     );
     final curve =
         CurvedAnimation(parent: _controller, curve: Curves.decelerate);
